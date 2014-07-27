@@ -34,33 +34,42 @@ $ bundle
 
 Default
 
-````ruby
+```ruby
 class Page < ActiveRecord::Base
   translates :title, :body
   globalize_accessors locales: [:en, :es, :fr, :pl], attributes: [:title]
   globalize_validations # Will use Model.globalize_locales by default
+
+  # Add all your validations before
+  validate :validates_globalized_attributes
 end
-````
+```
 
 With custom locales
 
-````ruby
+```ruby
 class Page < ActiveRecord::Base
   translates :title, :body
   globalize_accessors locales: [:en, :es, :fr, :pl], attributes: [:title]
   globalize_validations locales: [:en, :es] # Validates only `:en` and `:es` locales
+
+  # Add all your validations before
+  validate :validates_globalized_attributes
 end
-````
+```
 
 With custom locales as Proc
 
-````ruby
+```ruby
 class Page < ActiveRecord::Base
   translates :title, :body
   globalize_accessors locales: [:en, :es, :fr, :pl], attributes: [:title]
   globalize_validations locales: Proc.new { |page| page.available_locales }
+
+  # Add all your validations before
+  validate :validates_globalized_attributes
 end
-````
+```
 
 ## Licence
 

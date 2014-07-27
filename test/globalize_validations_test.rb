@@ -7,6 +7,7 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
     globalize_validations
 
     validates :title, presence: true, uniqueness: true
+    validate :validates_globalized_attributes
   end
 
   class PageWithLimitedGlobalizedLocales < ActiveRecord::Base
@@ -17,6 +18,7 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
     globalize_validations
 
     validates :title, presence: true, uniqueness: true
+    validate :validates_globalized_attributes
   end
 
   class PageWithLimitedLocales < ActiveRecord::Base
@@ -27,6 +29,7 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
     globalize_validations locales: [:en, :fr]
 
     validates :title, presence: true, uniqueness: true
+    validate :validates_globalized_attributes
   end
 
   class PageWithLimitedLocalesAsProc < ActiveRecord::Base
@@ -37,6 +40,7 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
     globalize_validations locales: Proc.new { |page| page.available_locales }
 
     validates :title, presence: true, uniqueness: true
+    validate :validates_globalized_attributes
 
     attr_accessor :available_locales
   end
@@ -49,6 +53,7 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
     globalize_validations locales: [:es, :fr]
 
     validates :title, presence: true, uniqueness: true
+    validate :validates_globalized_attributes
   end
 
   setup do

@@ -3,10 +3,6 @@ module Globalize
     module Concern
       extend ActiveSupport::Concern
 
-      included do
-        after_validation :validates_globalized_attributes
-      end
-
       private
 
       # This validation will perform a validation round against each globalized locales
@@ -35,10 +31,11 @@ module Globalize
       # Return all translated attributes with errors for the given locales,
       # including their error messages
       def globalized_errors_for_locales(attribute_names, locales)
-        additional_locales = locales.map(&:to_s) - [I18n.locale.to_s]
+        locales.map!(&:to_s)
+        additional_locales = locales - [I18n.locale.to_s]
 
         {}.tap do |globalized_errors|
-          if locales.map(&:to_s).include? I18n.locale.to_s
+          if locales.include? I18n.locale.to_s
             # Track errors for current locale
             globalized_errors.merge! globalized_errors_for_locale(attribute_names, I18n.locale)
           end
