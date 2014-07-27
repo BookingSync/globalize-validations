@@ -38,7 +38,7 @@ Default
 class Page < ActiveRecord::Base
   translates :title, :body
   globalize_accessors locales: [:en, :es, :fr, :pl], attributes: [:title]
-  globalize_validations # Will use I18n.available_locales by default
+  globalize_validations # Will use Model.globalize_locales by default
 end
 ````
 
@@ -48,7 +48,7 @@ With custom locales
 class Page < ActiveRecord::Base
   translates :title, :body
   globalize_accessors locales: [:en, :es, :fr, :pl], attributes: [:title]
-  globalize_validations locales: [:en, :es, :fr, :pl]
+  globalize_validations locales: [:en, :es] # Validates only `:en` and `:es` locales
 end
 ````
 
