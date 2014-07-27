@@ -17,6 +17,7 @@ module Globalize
                   else
                     self.globalize_validations_locales
                   end
+        locales ||= []
 
         globalized_errors = globalized_errors_for_locales(translated_attribute_names, locales)
 

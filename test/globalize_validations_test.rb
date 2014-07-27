@@ -132,6 +132,13 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
     assert page.valid?, "Must be valid if all locales given by the Proc are satisfied."
   end
 
+  test "validates without locales given as Proc" do
+    page = PageWithLimitedLocalesAsProc.new(title: "Title")
+    page.available_locales = nil
+
+    assert page.valid?, "Must be valid if all locales given by the Proc are satisfied."
+  end
+
   test "validates only for the given locales, without current one" do
     page = PageWithoutCurrentLocales.new(title_es: "Titulo", title_fr: "Titre")
     assert page.valid?, "Must be valid if all chosen locales are satisfied."
