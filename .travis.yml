@@ -1,0 +1,11 @@
+language: ruby
+before_script:
+  - "cp test/db/database.yml.travis test/db/database.yml"
+script: "bundle exec rake"
+env:
+  - RAILS_3=true
+  - RAILS_4=true
+rvm:
+  - 2.1.2
+  - 2.0.0
+  - 1.9.3
