@@ -3,7 +3,7 @@ module Globalize
     module Model
       # Enables validations for all available locales
       #
-      # # @param options [Hash] Configuration options for globalize-validations.
+      # @param options [Hash] Configuration options for globalize-validations.
       #   They are inherited by subclasses, but can be overwritten in the subclass.
       # @option options [Symbol] locales: locales against which the object will be validated,
       #   default is the Model's globalize_locales.
