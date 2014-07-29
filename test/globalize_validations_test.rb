@@ -56,6 +56,17 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
     validate :validates_globalized_attributes
   end
 
+  class PageWithComposedLocale < ActiveRecord::Base
+    self.table_name = :pages
+
+    translates :title, :body
+    globalize_accessors locales: [:en, :"zh-TW"]
+    globalize_validations
+
+    validates :title, presence: true, uniqueness: true
+    validate :validates_globalized_attributes
+  end
+
   setup do
     assert_equal :en, I18n.locale
   end
@@ -142,5 +153,16 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
   test "validates only for the given locales, without current one" do
     page = PageWithoutCurrentLocales.new(title_es: "Titulo", title_fr: "Titre")
     assert page.valid?, "Must be valid if all chosen locales are satisfied."
+  end
+
+  test "validates with composed locales" do
+    page = PageWithComposedLocale.new(title_en: "Title", title_zh_tw: "ชื่อเรื่อง")
+    assert page.valid?, "Must be valid with composed locales"
+  end
+
+  test "returns errors for composed locales" do
+    page = PageWithComposedLocale.new(title_en: "Title")
+    page.valid?
+    assert_equal ["can't be blank"], page.errors[:title_zh_tw]
   end
 end

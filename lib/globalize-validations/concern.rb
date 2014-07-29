@@ -12,10 +12,10 @@ module Globalize
         return unless Globalize.locale == I18n.locale
 
         # Define which locales to validate against
-        locales = if self.globalize_validations_locales.respond_to?(:call)
-                    self.globalize_validations_locales.call(self)
+        locales = if globalize_validations_locales.respond_to?(:call)
+                    globalize_validations_locales.call(self)
                   else
-                    self.globalize_validations_locales
+                    globalize_validations_locales
                   end
         locales ||= []
 
@@ -59,7 +59,7 @@ module Globalize
         {}.tap do |globalized_errors|
           translated_attribute_names.each do |attribute|
             if (error = errors.messages.delete(attribute.to_sym)).present?
-              globalized_errors["#{attribute}_#{locale}".to_sym] = error
+              globalized_errors["#{attribute}_#{locale.to_s.underscore}".to_sym] = error
             end
           end
         end
