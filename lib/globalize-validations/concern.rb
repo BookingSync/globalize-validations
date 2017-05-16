@@ -31,8 +31,8 @@ module Globalize
 
       # Return all translated attributes with errors for the given locales,
       # including their error messages
-      def globalized_errors_for_locales(attribute_names, locales)
-        locales.map!(&:to_s)
+      def globalized_errors_for_locales(attribute_names, source_locales)
+        locales = source_locales.map(&:to_s)
         additional_locales = locales - [I18n.locale.to_s]
 
         {}.tap do |globalized_errors|
