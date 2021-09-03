@@ -12,7 +12,19 @@ require 'globalize-validations'
 test_dir = File.dirname(__FILE__)
 
 ActiveRecord::Base.logger = Logger.new(File.join(test_dir, "debug.log"))
-ActiveRecord::Base.configurations = YAML::load(IO.read(File.join(test_dir, 'db', 'database.yml')))
-ActiveRecord::Base.establish_connection("sqlite3mem")
-ActiveRecord::Migration.verbose = false
-load(File.join(test_dir, "db", "schema.rb"))
+ActiveRecord::Base.establish_connection(
+  adapter: "sqlite3",
+  database: ":memory:"
+)
+ActiveRecord::Schema.define do
+  create_table "pages", :force => true do |t|
+    t.integer  "position"
+  end
+
+  create_table "page_translations", :force => true do |t|
+    t.references :page
+    t.string "title"
+    t.text "body"
+    t.string "locale"
+  end
+end
