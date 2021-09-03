@@ -16,11 +16,11 @@ Gem::Specification.new do |s|
   s.files = Dir["{app,config,db,lib}/**/*", "MIT-LICENSE", "Rakefile", "README.md"]
   s.test_files = Dir["span/**/*"]
 
-  s.add_dependency "globalize", ">= 3"
-  s.add_dependency "globalize-accessors", "~> 0.1"
+  s.add_dependency "globalize"
+  s.add_dependency "globalize-accessors"
+  s.add_dependency "activerecord", "< 6.1"
 
-  s.add_development_dependency "bundler", "~> 1.3"
-  s.add_development_dependency "rake", "~> 0.9"
-  s.add_development_dependency "sqlite3", "~> 1.3"
-  s.add_development_dependency "minitest", "~> 4.2"
+  s.add_development_dependency "rake"
+  s.add_development_dependency "sqlite3"
+  s.add_development_dependency "minitest"
 end
