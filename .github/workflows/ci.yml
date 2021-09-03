@@ -1,11 +1,21 @@
 name: CI
 on: [push]
 jobs:
-  Run-tests:
+  tests:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ruby-version: [3.0.2, 2.7.4, 2.6.8, 2.5.9]
+        include:
+          - ruby-version: 3.0.2
+            gemfile: Gemfile
+          - ruby-version: 2.7.4
+            gemfile: Gemfile
+          - ruby-version: 2.6.8
+            gemfile: Gemfile.rails.6.0
+          - ruby-version: 2.5.9
+            gemfile: Gemfile.rails.6.0
+    env:
+      BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     steps:
       - uses: actions/checkout@v2
       - name: Set up Ruby

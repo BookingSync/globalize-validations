@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "globalize"
   s.add_dependency "globalize-accessors"
-  s.add_dependency "activerecord", "< 6.1"
+  s.add_dependency "activerecord"
 
   s.add_development_dependency "rake"
   s.add_development_dependency "sqlite3"

@@ -58,7 +58,7 @@ module Globalize
       def globalized_errors_for_locale(translated_attribute_names, locale)
         {}.tap do |globalized_errors|
           translated_attribute_names.each do |attribute|
-            if (error = errors.messages.delete(attribute.to_sym)).present?
+            if (error = errors.delete(attribute.to_sym)).present?
               globalized_errors["#{attribute}_#{locale.to_s.underscore}".to_sym] = error
             end
           end
