@@ -7,13 +7,13 @@ jobs:
       matrix:
         include:
           - ruby-version: 3.0.2
-            gemfile: Gemfile
+            gemfile: gemfiles/Gemfile.rails.7.0
           - ruby-version: 2.7.4
-            gemfile: Gemfile
+            gemfile: gemfiles/Gemfile.rails.6.1
           - ruby-version: 2.6.8
-            gemfile: Gemfile.rails.6.0
+            gemfile: gemfiles/Gemfile.rails.6.0
           - ruby-version: 2.5.9
-            gemfile: Gemfile.rails.6.0
+            gemfile: gemfiles/Gemfile.rails.5.2
     env:
       BUNDLE_GEMFILE: ${{ matrix.gemfile }}
     steps:
