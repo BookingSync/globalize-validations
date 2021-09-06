@@ -1,5 +1,5 @@
 [![Code Climate](https://codeclimate.com/github/BookingSync/globalize-validations.png)](https://codeclimate.com/github/BookingSync/globalize-validations)
-[![Build Status](https://travis-ci.org/BookingSync/globalize-validations.png?branch=master)](https://travis-ci.org/BookingSync/globalize-validations)
+[![CI](https://github.com/BookingSync/globalize-validations/actions/workflows/ci.yml/badge.svg)](https://github.com/BookingSync/globalize-validations/actions/workflows/ci.yml)
 
 # Globalize-Validations
 
