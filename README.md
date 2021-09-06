@@ -6,11 +6,7 @@
 Globalize Validations validates your translated attributes for each given locales.
 The errors are added to the globalize attributes accessor names (example `title_en`).
 
-`globalize-validations` is compatible with Rails 3.x, Rails 4.0.x and Rails 4.1.x.
-
-## Requirements
-
-Globalize `>= 3.0.0`, Globalize-Accessors `>= 0.1.3` and Ruby `>= 1.9.3`.
+`globalize-validations` is compatible with Rails 5.2, Rails 6.x and Rails 7.0.x.
 
 ## Documentation
 
