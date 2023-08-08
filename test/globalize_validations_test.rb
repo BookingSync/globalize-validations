@@ -103,9 +103,9 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
 
     assert page.invalid?, "Can't be valid with title present for all locales"
 
-    assert_equal ["can't be blank"],  page.errors[:title_en]
-    assert_equal ["can't be blank"],  page.errors[:title_fr]
-    assert_equal ["can't be blank"],  page.errors[:title_es]
+    assert_equal ["can't be blank"],  (page.errors[:title_en].map { |e| e.tr("’", "'") })
+    assert_equal ["can't be blank"],  (page.errors[:title_fr].map { |e| e.tr("’", "'") })
+    assert_equal ["can't be blank"],  (page.errors[:title_es].map { |e| e.tr("’", "'") })
   end
 
   test "does not keep errors in none translated attribute names" do
@@ -176,13 +176,13 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
   test "returns errors for composed locales" do
     page = PageWithComposedLocale.new(title_en: "Title")
     page.valid?
-    assert_equal ["can't be blank"], page.errors[:title_zh_tw]
+    assert_equal ["can't be blank"], (page.errors[:title_zh_tw].map { |e| e.tr("’", "'") })
   end
 
   test "returns only one error when only default locale is invalid and others are provided" do
     page = Page.new(title_fr: "title", title_es: "title")
     page.valid?
-    assert_equal ["can't be blank"], page.errors[:title_en]
+    assert_equal ["can't be blank"], (page.errors[:title_en].map { |e| e.tr("’", "'") })
     assert_empty page.errors[:title_es]
     assert_empty page.errors[:title_fr]
   end
