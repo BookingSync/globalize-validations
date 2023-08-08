@@ -189,9 +189,23 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
 
   test "return errors for all locales when default locale is invalid and others are not provided but have valid default" do
     page = PageWithValidDefault.new(title_en: "titlex")
+
     assert page.invalid?
     assert_equal ["is too long (maximum is 5 characters)"], page.errors[:title_en]
     assert_empty page.errors[:title_es]
+    assert_empty page.errors[:title_fr]
+  end
+
+  test "return errors for all locales when default locale is invalid and others fall back to default" do
+    page = PageWithValidDefault.new(title_en: "titlex", title_fr: "title")
+
+    fallbacks = I18n.fallbacks
+    I18n.fallbacks = { en: [:en], fr: [:fr, :en], es: [:es, :en] }
+    assert page.invalid?
+    I18n.fallbacks = fallbacks
+
+    assert_equal ["is too long (maximum is 5 characters)"], page.errors[:title_en]
+    assert_equal ["is too long (maximum is 5 characters)"], page.errors[:title_es]
     assert_empty page.errors[:title_fr]
   end
 end
