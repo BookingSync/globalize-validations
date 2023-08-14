@@ -11,6 +11,8 @@ require 'globalize-validations'
 
 test_dir = File.dirname(__FILE__)
 
+I18n::Backend::Simple.include(I18n::Backend::Fallbacks)
+
 ActiveRecord::Base.logger = Logger.new(File.join(test_dir, "debug.log"))
 ActiveRecord::Base.establish_connection(
   adapter: "sqlite3",

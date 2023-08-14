@@ -38,16 +38,14 @@ module Globalize
         {}.tap do |globalized_errors|
           if locales.include? I18n.locale.to_s
             # Track errors for current locale
-            globalized_errors.merge! globalized_errors_for_locale(attribute_names, I18n.locale)
+            globalized_errors_for_locale(globalized_errors, attribute_names, I18n.locale)
           end
 
           # Validates the given object against each locale except the current one
           # and track their errors
           additional_locales.each do |locale|
             Globalize.with_locale(locale) do
-              if invalid?
-                globalized_errors.merge! globalized_errors_for_locale(attribute_names, locale)
-              end
+              globalized_errors_for_locale(globalized_errors, attribute_names, locale) if invalid?
             end
           end
         end
@@ -55,12 +53,19 @@ module Globalize
 
       # Return all translated attributes with errors for the given locale,
       # including their error messages
-      def globalized_errors_for_locale(translated_attribute_names, locale)
-        {}.tap do |globalized_errors|
-          translated_attribute_names.each do |attribute|
-            if (error = errors.delete(attribute.to_sym)).present?
-              globalized_errors["#{attribute}_#{locale.to_s.underscore}".to_sym] = error
-            end
+      def globalized_errors_for_locale(globalized_errors, translated_attribute_names, locale)
+        translated_attribute_names.each do |attribute|
+          value = send(attribute)
+          if value.respond_to?(:translation_metadata)
+            fallback_locale = value.translation_metadata[:locale]
+          end
+
+          error = errors.delete(attribute.to_sym)
+          if error.present?
+            next if fallback_locale.present? &&
+              globalized_errors["#{attribute}_#{fallback_locale.to_s.underscore}".to_sym].present?
+
+            globalized_errors["#{attribute}_#{locale.to_s.underscore}".to_sym] = error
           end
         end
       end

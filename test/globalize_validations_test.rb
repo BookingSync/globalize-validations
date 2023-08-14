@@ -69,6 +69,17 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
     validate :validates_globalized_attributes
   end
 
+  class PageWithValidDefault < ActiveRecord::Base
+    self.table_name = :pages
+
+    translates :title, :body
+    globalize_accessors
+    globalize_validations
+
+    validates :title, length: { maximum: 5 }, allow_blank: true
+    validate :validates_globalized_attributes
+  end
+
   setup do
     assert_equal :en, I18n.locale
   end
@@ -92,9 +103,9 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
 
     assert page.invalid?, "Can't be valid with title present for all locales"
 
-    assert_equal ["can't be blank"],  page.errors[:title_en]
-    assert_equal ["can't be blank"],  page.errors[:title_fr]
-    assert_equal ["can't be blank"],  page.errors[:title_es]
+    assert_equal ["can't be blank"],  (page.errors[:title_en].map { |e| e.tr("’", "'") })
+    assert_equal ["can't be blank"],  (page.errors[:title_fr].map { |e| e.tr("’", "'") })
+    assert_equal ["can't be blank"],  (page.errors[:title_es].map { |e| e.tr("’", "'") })
   end
 
   test "does not keep errors in none translated attribute names" do
@@ -165,6 +176,36 @@ class GlobalizeValidationsTest < ActiveSupport::TestCase
   test "returns errors for composed locales" do
     page = PageWithComposedLocale.new(title_en: "Title")
     page.valid?
-    assert_equal ["can't be blank"], page.errors[:title_zh_tw]
+    assert_equal ["can't be blank"], (page.errors[:title_zh_tw].map { |e| e.tr("’", "'") })
+  end
+
+  test "returns only one error when only default locale is invalid and others are provided" do
+    page = Page.new(title_fr: "title", title_es: "title")
+    page.valid?
+    assert_equal ["can't be blank"], (page.errors[:title_en].map { |e| e.tr("’", "'") })
+    assert_empty page.errors[:title_es]
+    assert_empty page.errors[:title_fr]
+  end
+
+  test "return errors for all locales when default locale is invalid and others are not provided but have valid default" do
+    page = PageWithValidDefault.new(title_en: "titlex")
+
+    assert page.invalid?
+    assert_equal ["is too long (maximum is 5 characters)"], page.errors[:title_en]
+    assert_empty page.errors[:title_es]
+    assert_empty page.errors[:title_fr]
+  end
+
+  test "return errors for all locales when default locale is invalid and others fall back to default" do
+    page = PageWithValidDefault.new(title_en: "titlex", title_fr: "title")
+
+    fallbacks = I18n.fallbacks
+    I18n.fallbacks = { en: [:en], fr: [:fr, :en], es: [:es, :en] }
+    assert page.invalid?
+    I18n.fallbacks = fallbacks
+
+    assert_equal ["is too long (maximum is 5 characters)"], page.errors[:title_en]
+    assert_equal ["is too long (maximum is 5 characters)"], page.errors[:title_es]
+    assert_empty page.errors[:title_fr]
   end
 end
